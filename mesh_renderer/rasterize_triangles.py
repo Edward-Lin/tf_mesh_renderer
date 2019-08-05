@@ -23,6 +23,8 @@ import tensorflow as tf
 
 import camera_utils
 
+os.environ['TEST_SRCDIR'] = '/data/source/'
+
 rasterize_triangles_module = tf.load_op_library(
     os.path.join(os.environ['TEST_SRCDIR'],
     'tf_mesh_renderer/mesh_renderer/kernels/rasterize_triangles_kernel.so'))
@@ -106,8 +108,9 @@ def rasterize_clip_space(clip_space_vertices, attributes, triangles,
 
   vertex_count = clip_space_vertices.shape[1].value
 
-  batch_size = tf.shape(clip_space_vertices)[0]
-  
+  # batch_size = tf.shape(clip_space_vertices)[0]
+  batch_size = clip_space_vertices.shape[0].value
+
   per_image_barycentric_coordinates = tf.TensorArray(dtype=tf.float32,
     size=batch_size)
   per_image_vertex_ids = tf.TensorArray(dtype=tf.int32, size=batch_size)
